@@ -1,0 +1,121 @@
+// C++ BFS
+#include <iostream>
+#include <queue>
+using namespace std;
+
+class Graph{
+  int m_V;
+  vector<vector<int>> m_adj;
+public:
+  Graph(int V): m_V(V), m_adj(V){}
+  void addEdge(int u, int v){
+    m_adj[u].push_back(v);
+  }
+  void BFS(int s){
+    queue<int> Q;
+    vector<bool> visited(m_V, false);
+    Q.push(s);
+    visited[s] = true;
+    while(!Q.empty()){
+      int v = Q.front();
+      Q.pop();
+      cout << v << "  ";
+      for(int u : m_adj[v])
+        if(!visited[u]){
+        	Q.push(u);
+        	visited[u] = true;
+        }
+    }
+  }
+};
+
+int main(){
+  Graph G(5);
+  G.addEdge(0,1);
+  G.addEdge(0,3);
+  G.addEdge(1,2);
+  G.addEdge(3,2);
+  G.addEdge(3,4);
+  G.BFS(0);
+  
+  return 0;
+}
+
+// Java
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Graph {
+	private int m_V;
+	private List<Integer>[] m_adj;
+	Graph(int v){
+		m_V = v;
+		m_adj = new LinkedList[v];
+		for(int i = 0; i < v; ++i)
+			m_adj[i] = new LinkedList<Integer>();
+	}
+	
+	public void addEdge(int u, int v){
+		m_adj[u].add(v);
+	}
+	
+	public void BFS(int s){
+    	LinkedList<Integer> Q = new LinkedList();
+    	boolean[] visited = new boolean[m_V];
+    	Q.add(s);
+    	visited[s] = true;
+    	while(!Q.isEmpty()){
+    		int v = Q.poll();
+    		System.out.println(v+" ");
+    		for(int u : m_adj[v]){
+        		if(!visited[u]){
+        			Q.add(u);
+        			visited[u] = true;
+        		}
+        	}
+    	}
+    }
+	
+	public static void main (String[] args) throws java.lang.Exception{
+		Graph G = new Graph(5);
+		G.addEdge(0,1);
+		G.addEdge(0,3);
+		G.addEdge(1,2);
+		G.addEdge(3,2);
+		G.addEdge(3,4);
+		G.BFS(0);
+	}
+}
+
+
+# Python3
+
+class Graph:
+	def __init__(self, v):
+		self.m_V = v
+		self.m_adj = [[] for i in range(v)]
+	
+	def addEdge(self, u, v):
+		self.m_adj[u].append(v)
+	
+	def BFS(self, s):
+		Q = []
+		visited = [False]*self.m_V
+		Q.append(s)
+		visited[s] = True
+		while len(Q) > 0:
+			v = Q.pop(0)
+			print(f'{v} ')
+			for u in self.m_adj[v]:
+				if not visited[u]:
+					Q.append(u)
+					visited[u] = True
+					
+G = Graph(5)
+G.addEdge(0,1)
+G.addEdge(0,3)
+G.addEdge(1,2)
+G.addEdge(3,2)
+G.addEdge(3,4)
+G.BFS(0)
