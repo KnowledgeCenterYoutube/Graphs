@@ -25,7 +25,7 @@ public:
         m_adj[u].push_back(v);
     }
     
-    void DFS(int s){
+    void DFS(){
         vector<bool> visited(m_v, false);
         for(int i = 0; i < m_v; ++i)
             if(!visited[i]) DFS_rec(i, visited);
@@ -39,8 +39,85 @@ int main(){
     G.addEdge(1,2);
     G.addEdge(3,2);
     G.addEdge(3,4);
-    G.DFS(0);
+    G.DFS();
    
    return 0;
 }
 
+
+// Java
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class Graph{
+	private int m_v;
+	private List<Integer>[] m_adj;
+	Graph(int v){
+		m_v = v;
+		m_adj = new LinkedList[v];
+		for(int i = 0; i < v; ++i)
+			m_adj[i] = new LinkedList<Integer>();
+	}
+	
+	public void addEdge(int u, int v){
+		m_adj[u].add(v);
+	}
+	
+	private void DFS_rec(int s, boolean[] visited){
+        visited[s] = true;
+        System.out.println(s);
+        for(int u: m_adj[s]){
+            if(!visited[u])
+                DFS_rec(u, visited);
+        }
+    }
+	
+	public void DFS(){
+	    boolean[] visited = new boolean[m_v];
+	    for(int i = 0; i < m_v; ++i)
+	        if(!visited[i]) DFS_rec(i, visited);
+	}
+
+     public static void main(String []args){
+        Graph G = new Graph(5);
+		G.addEdge(0,1);
+		G.addEdge(0,3);
+		G.addEdge(1,2);
+		G.addEdge(3,2);
+		G.addEdge(3,4);
+		G.DFS();
+     }
+}
+
+// Python3
+
+class Graph:
+	def __init__(self, v):
+		self.m_v = v
+		self.m_adj = [[] for i in range(v)]
+	
+	def addEdge(self, u, v):
+		self.m_adj[u].append(v)
+		
+	def DFS_rec(self, s, visited):
+	    visited[s] = True
+	    print(s)
+	    for u in self.m_adj[s]:
+	        if not visited[u]:
+	            self.DFS_rec(u, visited)
+	            
+	def DFS(self):
+	    visited = [False]*self.m_v
+	    for i in range(self.m_v):
+	        if not visited[i]:
+	            self.DFS_rec(i, visited)
+	    
+G = Graph(5)
+G.addEdge(0,1)
+G.addEdge(0,3)
+G.addEdge(1,2)
+G.addEdge(3,2)
+G.addEdge(3,4)
+G.DFS()
