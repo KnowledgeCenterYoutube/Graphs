@@ -1,0 +1,46 @@
+// Defpth First Search(DFS) Traversal of Graph
+// Detailed Explanation available here: 
+
+// C++
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    void DFS_rec(int s, vector<bool>& visited){
+        visited[s] = true;
+        cout << s << endl;
+        for(int u: m_adj[s]){
+            if(!visited[u])
+                DFS_rec(u, visited);
+        }
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v){}
+    
+    void addEdge(int u, int v){
+        m_adj[u].push_back(v);
+    }
+    
+    void DFS(int s){
+        vector<bool> visited(m_v, false);
+        for(int i = 0; i < m_v; ++i)
+            if(!visited[i]) DFS_rec(i, visited);
+    }
+};
+
+int main(){
+    Graph G(5);
+    G.addEdge(0,1);
+    G.addEdge(0,3);
+    G.addEdge(1,2);
+    G.addEdge(3,2);
+    G.addEdge(3,4);
+    G.DFS(0);
+   
+   return 0;
+}
+
