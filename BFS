@@ -1,4 +1,8 @@
-// C++ BFS
+Breadth First Search(BFS) traversal
+Detailed Explanation available here: https://youtu.be/6J50_2SD0C8
+
+// C++
+
 #include <iostream>
 #include <queue>
 using namespace std;
