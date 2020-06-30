@@ -4,6 +4,7 @@
 // C++
 #include <iostream>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -16,6 +17,24 @@ class Graph{
         for(int u: m_adj[s]){
             if(!visited[u])
                 DFS_rec(u, visited);
+        }
+    }
+    
+    void DFS_it(int s, vector<bool>& visited){
+        stack<int> S;
+        S.push(s);
+        visited[s] = true;
+        
+        while(!S.empty()){
+            int u = S.top();
+            S.pop();
+            cout << u << endl;
+            for(int v: m_adj[u]){
+                if(!visited[v]){
+                    S.push(v);
+                    visited[v] = true;
+                }
+            }
         }
     }
 public:
@@ -66,13 +85,29 @@ public class Graph{
 	}
 	
 	private void DFS_rec(int s, boolean[] visited){
-        visited[s] = true;
-        System.out.println(s);
-        for(int u: m_adj[s]){
-            if(!visited[u])
-                DFS_rec(u, visited);
-        }
-    }
+        	visited[s] = true;
+        	System.out.println(s);
+        	for(int u: m_adj[s]){
+            	if(!visited[u])
+                	DFS_rec(u, visited);
+        	}
+    	}
+	private void DFS_it(int s, boolean[] visited){
+        	Stack<Integer> S = new Stack<Integer>();
+        	S.push(s);
+        	visited[s] = true;
+        
+        	while(!S.empty()){
+            	int u = S.peek();
+            	S.pop();
+            	System.out.println(u);
+            	for(int v: m_adj[u]){
+                	if(!visited[v]){
+                    		S.push(v);
+                    		visited[v] = true;
+                	}
+        	}
+    	}
 	
 	public void DFS(){
 	    boolean[] visited = new boolean[m_v];
@@ -107,6 +142,19 @@ class Graph:
 	    for u in self.m_adj[s]:
 	        if not visited[u]:
 	            self.DFS_rec(u, visited)
+	
+	def DFS_it(self, s, visited):
+	    S = []
+	    S.append(s)
+	    visited[s] = True
+	    while len(S) > 0:
+	        u = S[-1]
+	        S.pop()
+	        print(u)
+	        for v in self.m_adj[u]:
+	            if not visited[v]:
+	                S.append(v)
+	                visited[v] = True
 	            
 	def DFS(self):
 	    visited = [False]*self.m_v
