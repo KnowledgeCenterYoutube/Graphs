@@ -1,0 +1,52 @@
+C++:
+
+#include <iostream>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    int time;
+    void DFS_rec(int s, vector<bool>& visited, vector<int>& pre, vector<int>& post){
+        visited[s] = true;
+        pre[s] = time++;
+        cout << s << endl;
+        for(int u: m_adj[s]){
+            if(!visited[u])
+                DFS_rec(u, visited, pre, post);
+        }
+        post[s] = time++;
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v), time(0){}
+    
+    void addEdge(int u, int v){
+        m_adj[u].push_back(v);
+    }
+    
+    void DFS(){
+        vector<bool> visited(m_v, false);
+        vector<int> pre(m_v), post(m_v);
+        for(int i = 0; i < m_v; ++i)
+            if(!visited[i]) DFS_rec(i, visited, pre, post);
+        
+        for(int i = 0; i < m_v; ++i){
+            cout << i << " : " << pre[i] << ", " << post[i] << endl;
+        }
+    }
+};
+
+int main(){
+    Graph G(5);
+    G.addEdge(0,1);
+    G.addEdge(0,3);
+    G.addEdge(1,2);
+    G.addEdge(3,2);
+    G.addEdge(3,4);
+    G.DFS();
+   
+   return 0;
+}
