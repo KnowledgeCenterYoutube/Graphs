@@ -1,0 +1,60 @@
+// Detect Cycle in Directed Graph
+// Author: Knowledge Center
+// https://www.youtube.com/c/KnowledgeCenter/
+// Video Explanation: https://youtu.be/1CdgY5KTQQE
+
+#include <iostream>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+enum node_states_en{
+    UNVISITED,
+    INSTACK,
+    VISITED
+};
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    int time;
+    bool DFS_rec(int s, vector<node_states_en>& visited){
+        visited[s] = INSTACK;
+        //cout << s << endl;
+        for(int u: m_adj[s]){
+            if(visited[u] == INSTACK) return true;
+            if(visited[u] == UNVISITED && DFS_rec(u, visited)) return true;
+        }
+        visited[s] = VISITED;
+        return false;
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v), time(0){}
+ 
+    void addEdge(int u, int v){
+        m_adj[u].push_back(v);
+    }
+ 
+    bool hasCycle(){
+        vector<node_states_en> visited(m_v, UNVISITED);
+        for(int i = 0; i < m_v; ++i)
+            if(visited[i] == UNVISITED && DFS_rec(i, visited)) return true;
+        return false;
+    }
+};
+ 
+int main(){
+    Graph G(5);
+    G.addEdge(0,1);
+    G.addEdge(0,3);
+    G.addEdge(1,2);
+    G.addEdge(3,4);
+    G.addEdge(4,0);
+    G.addEdge(4,2);
+    bool hasCycle = G.hasCycle();
+    cout << std::boolalpha << hasCycle << endl;
+ 
+   return 0;
+}
+
