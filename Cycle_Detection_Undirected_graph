@@ -1,0 +1,53 @@
+// Detect Cycle in Undirected Graph
+// Author: Knowledge Center
+// https://www.youtube.com/c/KnowledgeCenter/
+// Video Explanation: https://youtu.be/Gx-uJSqIa1Q
+
+#include <iostream>
+#include <vector> 
+using namespace std;
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    
+    bool hasCycle_rec(int u, vector<bool>& visited, int parent){
+        visited[u] = true;
+        //cout << u << endl;
+        for(int v : m_adj[u]){
+            if(visited[v] && v != parent) return true;
+            if(!visited[v] && hasCycle_rec(v, visited, u)) return true;
+        }
+        return false;
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v){}
+    
+    void add_Edge(int u, int v){
+        m_adj[u].push_back(v);
+        m_adj[v].push_back(u);
+    }
+    
+    bool hasCycle(){
+        vector<bool> visited(m_v, false);
+        for(int i = 0; i < m_v; ++i){
+            if(!visited[i] && hasCycle_rec(i, visited, -1)) return true;
+        }
+        return false;
+    }
+};
+
+int main(){
+   Graph G(5);
+   G.add_Edge(0,1);
+   G.add_Edge(0,3);
+   //G.add_Edge(0,4);
+   G.add_Edge(1,2);
+   G.add_Edge(3,4);
+   //G.add_Edge(2,4);
+   bool cycle = G.hasCycle();
+   cout << boolalpha << cycle << endl;
+   
+   return 0;
+}
+
