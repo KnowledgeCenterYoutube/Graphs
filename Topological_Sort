@@ -1,0 +1,147 @@
+Topological Sort of Directed Acyclic Graph
+Detailed video explanation: https://youtu.be/3HHlOG05qEo
+============================================
+
+C++:
+----
+#include <iostream>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    void TS_rec(int s, vector<bool>& visited, stack<int>& S){
+        visited[s] = true;
+        
+        for(int u: m_adj[s]){
+            if(!visited[u])
+                TS_rec(u, visited, S);
+        }
+        
+        S.push(s);
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v){}
+    
+    void addEdge(int u, int v){
+        m_adj[u].push_back(v);
+    }
+    
+    void Top_Sort(){
+        vector<bool> visited(m_v, false);
+        stack<int> S;
+        for(int i = 0; i < m_v; ++i)
+            if(!visited[i]) TS_rec(i, visited, S);
+            
+        while(!S.empty()){
+            cout << S.top() << " ";
+            S.pop();
+        }
+    }
+};
+
+int main(){
+    Graph G(5);
+    G.addEdge(0,1);
+    G.addEdge(0,3);
+    G.addEdge(0,4);
+    G.addEdge(1,2);
+    G.addEdge(4,2);
+    G.addEdge(3,4);
+    G.Top_Sort();
+   
+   return 0;
+}
+
+
+Java:
+-----
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class Graph{
+	private int m_v;
+	private List<Integer>[] m_adj;
+	Graph(int v){
+		m_v = v;
+		m_adj = new LinkedList[v];
+		for(int i = 0; i < v; ++i)
+			m_adj[i] = new LinkedList<Integer>();
+	}
+	
+	public void addEdge(int u, int v){
+		m_adj[u].add(v);
+	}
+	
+	private void TS_rec(int s, boolean[] visited,Stack<Integer> S){
+        visited[s] = true;
+        for(int u: m_adj[s]){
+            if(!visited[u])
+            	TS_rec(u, visited, S);
+    	}
+    	S.push(s);
+	}
+	
+	public void Top_Sort(){
+	    boolean[] visited = new boolean[m_v];
+	    Stack<Integer> S = new Stack<>();
+	    for(int i = 0; i < m_v; ++i)
+	        if(!visited[i]) TS_rec(i, visited, S);
+	   
+	    while(!S.empty())
+	        System.out.println(S.pop());
+	}
+
+    public static void main(String []args){
+        Graph G = new Graph(5);
+		G.addEdge(0,1);
+        G.addEdge(0,3);
+        G.addEdge(0,4);
+        G.addEdge(1,2);
+        G.addEdge(4,2);
+        G.addEdge(3,4);
+        G.Top_Sort();
+    }
+}
+
+
+Python3:
+-------
+class Graph:
+    def __init__(self, v):
+        self.m_v = v
+        self.m_adj = [[] for i in range(v)]
+	
+    def addEdge(self, u, v):
+	    self.m_adj[u].append(v)
+		
+    def TS_rec(self, s, visited):
+        visited[s] = True
+        for u in self.m_adj[s]:
+            if not visited[u]: self.TS_rec(u, visited)
+        self.S.append(s)
+	            
+    def Top_Sort(self):
+        visited = [False]*self.m_v
+        self.S = []
+        for i in range(self.m_v):
+            if not visited[i]:
+                self.TS_rec(i, visited)
+        print(self.S)
+	    
+G = Graph(5)
+G.addEdge(0,1);
+G.addEdge(0,3);
+G.addEdge(0,4);
+G.addEdge(1,2);
+G.addEdge(4,2);
+G.addEdge(3,4);
+G.Top_Sort()
+
+
+
+
