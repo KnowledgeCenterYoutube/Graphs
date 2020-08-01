@@ -1,0 +1,222 @@
+Kosaraju's Algorithm for Strongly connected components in directed graph.
+Detailed video explanation: https://youtu.be/ZKb6jSpmbgk
+==========================================================================
+
+
+C++:
+------------------------------
+#include <iostream>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+class Graph{
+    int m_v;
+    vector<vector<int>> m_adj;
+    
+    void orderVertices(int s, vector<bool>& visited, stack<int>& S){
+        visited[s] = true;
+        
+        for(int u: m_adj[s])
+            if(!visited[u]) orderVertices(u, visited, S);
+        
+        S.push(s);
+    }
+    
+    Graph reverseGraph(){
+        Graph G(m_v);
+        for(int i = 0; i < m_v; ++i)
+            for(int u: m_adj[i]) G.m_adj[u].push_back(i);
+        return G;
+    }
+    
+    void dfs(vector<bool>& visited, int s){
+        visited[s] = true;
+        cout << s << " ";
+        for(int u: m_adj[s])
+            if(!visited[u]) dfs(visited, u);
+    }
+public:
+    Graph(int v):m_v(v), m_adj(v){}
+    
+    void addEdge(int u, int v){
+        m_adj[u].push_back(v);
+    }
+    
+    void SCC(){
+        vector<bool> visited(m_v, false);
+        stack<int> S;
+        for(int i = 0; i < m_v; ++i)
+            if(!visited[i]) orderVertices(i, visited, S);
+            
+        Graph G = reverseGraph();
+        for(int i = 0; i < m_v; ++i) visited[i] = false;
+        
+        while(!S.empty()){
+            int v = S.top();
+            S.pop();
+            if(!visited[v]){
+                G.dfs(visited, v);
+                cout << endl;
+            }
+        }
+    }
+};
+
+int main(){
+    Graph G(9);
+    G.addEdge(0,1);
+    G.addEdge(1,2);
+    G.addEdge(2,3);
+    G.addEdge(3,0);
+    G.addEdge(2,4);
+    G.addEdge(4,5);
+    G.addEdge(5,6);
+    G.addEdge(6,4);
+    G.addEdge(7,6);
+    G.addEdge(7,8);
+    
+    G.SCC();
+   
+   return 0;
+}
+
+
+Java:
+------------------------------
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class Graph{
+	private int m_v;
+	private List<Integer>[] m_adj;
+	Graph(int v){
+		m_v = v;
+		m_adj = new LinkedList[v];
+		for(int i = 0; i < v; ++i)
+			m_adj[i] = new LinkedList<Integer>();
+	}
+	
+	public void addEdge(int u, int v){
+		m_adj[u].add(v);
+	}
+	
+	private void orderVertices(int s, boolean[] visited, Stack<Integer> S){
+        visited[s] = true;
+        for(int u: m_adj[s]){
+            if(!visited[u])
+            	orderVertices(u, visited, S);
+    	}
+    	S.push(s);
+	}
+	
+	private Graph reverseGraph(){
+        Graph G = new Graph(m_v);
+        for(int i = 0; i < m_v; ++i)
+            for(int u: m_adj[i]) G.m_adj[u].add(i);
+        return G;
+    }
+    
+    private void dfs(boolean[] visited, int s){
+        visited[s] = true;
+        System.out.print(s + " ");
+        for(int u: m_adj[s])
+            if(!visited[u]) dfs(visited, u);
+    }
+	
+	public void SCC(){
+	    boolean[] visited = new boolean[m_v];
+	    Stack<Integer> S = new Stack<>();
+	    for(int i = 0; i < m_v; ++i)
+	        if(!visited[i]) orderVertices(i, visited, S);
+	   
+	    for(int i = 0; i < m_v; ++i) visited[i] = false;
+	    Graph G = reverseGraph();
+	    
+	    while(!S.empty()){
+	        int v = S.pop();
+            if(!visited[v]){
+                G.dfs(visited, v);
+                System.out.println();
+            }
+	    }
+	}
+
+    public static void main(String []args){
+        Graph G = new Graph(9);
+        G.addEdge(0,1);
+        G.addEdge(1,2);
+        G.addEdge(2,3);
+        G.addEdge(3,0);
+        G.addEdge(2,4);
+        G.addEdge(4,5);
+        G.addEdge(5,6);
+        G.addEdge(6,4);
+        G.addEdge(7,6);
+        G.addEdge(7,8);
+        
+        G.SCC();
+    }
+}
+
+
+Python3:
+------------------------------
+class Graph:
+    def __init__(self, v):
+        self.m_v = v
+        self.m_adj = [[] for i in range(v)]
+	
+    def addEdge(self, u, v):
+	    self.m_adj[u].append(v)
+		
+    def orderVertices(self, s, visited):
+        visited[s] = True
+        for u in self.m_adj[s]:
+            if not visited[u]: self.orderVertices(u, visited)
+        self.S.append(s)
+    
+    def reverseGraph(self):
+        G = Graph(self.m_v)
+        for i in range(self.m_v):
+            for u in self.m_adj[i]: G.m_adj[u].append(i)
+        return G
+    
+    def dfs(self, visited, s):
+        visited[s] = True
+        print(f'{s} ', end = "")
+        for u in self.m_adj[s]:
+            if not visited[u]: self.dfs(visited, u)
+	            
+    def SCC(self):
+        visited = [False]*self.m_v
+        self.S = []
+        for i in range(self.m_v):
+            if not visited[i]:
+                self.orderVertices(i, visited)
+        for i in range(self.m_v): visited[i] = False
+        G = self.reverseGraph()
+        
+        while len(self.S) > 0:
+            v = self.S.pop()
+            if not visited[v]:
+                G.dfs(visited, v)
+                print()
+	    
+G = Graph(9)
+G.addEdge(0,1)
+G.addEdge(1,2)
+G.addEdge(2,3)
+G.addEdge(3,0)
+G.addEdge(2,4)
+G.addEdge(4,5)
+G.addEdge(5,6)
+G.addEdge(6,4)
+G.addEdge(7,6)
+G.addEdge(7,8)
+
+G.SCC()
+
+
